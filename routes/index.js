@@ -1,7 +1,10 @@
 const { Router } = require('express');
 const { getAllCubes } = require('../controllers/cubes');
 const { getCube } = require('../controllers/database');
+<<<<<<< Updated upstream
 const Cube = require('../models/cube');
+=======
+>>>>>>> Stashed changes
 
 const router = Router();
 
@@ -26,6 +29,7 @@ router.get('/create', (req, res) => {
     });
 });
 
+<<<<<<< Updated upstream
 router.post('/create', (req, res) => {
     const {
         name,
@@ -38,6 +42,15 @@ router.post('/create', (req, res) => {
     cube.save(() => {
         res.redirect('/')
     });
+=======
+router.get('/details/:id', (req, res) => {
+    getCube(req.params.id, (cube) => {
+        res.render('details', {
+            title: 'Details | Cube Workshop',
+            ...cube
+        });
+    }); 
+>>>>>>> Stashed changes
 });
 
 router.get('/details/:id', (req, res) => {
