@@ -1,5 +1,10 @@
 const { v4 } = require('uuid');
 const { saveCube } = require('../controllers/database');
+<<<<<<< Updated upstream
+=======
+
+const databaseFile = path.join(__dirname,'..', '/config/database.json');
+>>>>>>> Stashed changes
 
 class Cube {
     constructor(name, description, imageUrl, difficulty) {
@@ -19,7 +24,11 @@ class Cube {
             difficulty: this.difficulty
         }
 
+<<<<<<< Updated upstream
         saveCube(newCube, callback);
+=======
+        saveCube(newCube);
+>>>>>>> Stashed changes
     }
 }
 
