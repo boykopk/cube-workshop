@@ -21,7 +21,7 @@ router.post('/create', (req, res) => {
     } = req.body;
 
     const token = req.cookies('aid');
-    const decodedObject = jwt.verify(token, 'wrong-secret');
+    const decodedObject = jwt.verify(token, config.privateKey);
 
     const cube = new Cube({name, description, imageUrl, difficulty: difficultyLevel, creatorId: decodedObject.userId});
     cube.save((err) => {
