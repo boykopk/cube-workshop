@@ -5,7 +5,7 @@ const getAccessories = async () => {
     const accessories = await Accessory.find().lean();
 
     return accessories;
-}
+};
 
 const attachedAccessories = async (cubeId) => {
     try{
