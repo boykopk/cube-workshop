@@ -10,7 +10,7 @@ const getAccessories = async () => {
 const attachedAccessories = async (cubeId) => {
     try{
         const cube = await Cube.findById(cubeId).lean();
-        const accessories = await Accessory.find({ cues: { $nin: cubeId } }).lean();
+        const accessories = await Accessory.find({ cubes: { $nin: cubeId } }).lean();
         return { cube, accessories };
     } catch (err) {
         return err;
