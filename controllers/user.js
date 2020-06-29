@@ -6,7 +6,7 @@ const config = require("../config/config")[env];
 const User = require("../models/user");
 
 const generateToken = (data) => {
-  const token = jwt.sign(data, config.privateKey);
+  const token = jwt.sign(data, config.privateKey, {expiresIn: '1h'});
 
   return token;
 };
@@ -29,7 +29,7 @@ const saveUser = async (req, res) => {
       username: userObject.username,
     });
 
-    res.cookie("aid", token);
+    res.cookie("aid", token, { expires: new Date(Date.now() + 8 * 3600000), httpOnly: true });
 
     return token;
   } catch (err) {
@@ -61,7 +61,7 @@ const verifyUser = async (req, res) => {
         username: user.username,
       });
 
-      res.cookie("aid", token);
+      res.cookie("aid", token, { expires: new Date(Date.now() + 8 * 3600000), httpOnly: true });
     }
 
     return {
