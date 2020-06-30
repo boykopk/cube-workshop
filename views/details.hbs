@@ -4,7 +4,13 @@
     <p><span>Description:</span>{{description}}</p>
     <p><span>Difficulty level:</span> {{difficulty}}</p>
     <a class="btn" href="/">Back</a>
-    <a class="btn" href="/attach/accessory/{{_id}}">Attach Accessory</a>
+
+    {{#if isLoggedIn}}
+      <a class="btn" href="/attach/accessory/{{_id}}">Attach Accessory</a>
+      <a class="btn" href="/edit/{{_id}}">Edit</a>
+      <a class="btn" href="/delete/{{_id}}">Delete</a>
+    {{/if}}
+
 </div>
 <h2>Accessories</h2>
 <div class="accessories">
