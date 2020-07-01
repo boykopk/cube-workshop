@@ -4,7 +4,7 @@ const express = require("express");
 const jwt = require("jsonwebtoken");
 const Cube = require("../models/cube");
 const { authAccess, getUserStatus } = require("../controllers/user");
-const { getCubeWithAccessories } = require("../controllers/cubes");
+const { getCubeWithAccessories, getCube } = require("../controllers/cubes");
 const config = require("../config/config")[env];
 const router = express.Router();
 
@@ -54,18 +54,70 @@ router.get("/details/:id", getUserStatus, async (req, res) => {
     ...cube,
     isLoggedIn: req.isLoggedIn,
   });
+
 });
 
-router.get("/edit", authAccess, getUserStatus, (req, res) => {
+router.get("/edit/:id", authAccess, getUserStatus, async (req, res) => {
+  const cube = await getCube(req.params.id);
+
+  const options = [
+    { title: '1 - Very Easy', selected: 1 === cube.difficulty },
+    { title: '2 - Easy', selected: 2 === cube.difficulty },
+    { title: '3 - Medium (Standard 3x3)', selected: 3 === cube.difficulty },
+    { title: '4 - Intermediate', selected: 4 === cube.difficulty },
+    { title: '5 - Expert', selected: 5 === cube.difficulty },
+    { title: '6 - Hardcore', selected: 6 === cube.difficulty }
+  ];
+
   res.render("editCubePage", {
-    isLoggedIn: req.isLoggedIn,
+    ...cube,
+    options,
+    isLoggedIn: req.isLoggedIn
   });
 });
 
-router.get("/delete", authAccess, getUserStatus, (req, res) => {
+router.get("/delete/:id", authAccess, getUserStatus, async (req, res) => {
+  const cube = await getCube(req.params.id);
+
+  const options = [
+    { title: '1 - Very Easy', selected: 1 === cube.difficulty },
+    { title: '2 - Easy', selected: 2 === cube.difficulty },
+    { title: '3 - Medium (Standard 3x3)', selected: 3 === cube.difficulty },
+    { title: '4 - Intermediate', selected: 4 === cube.difficulty },
+    { title: '5 - Expert', selected: 5 === cube.difficulty },
+    { title: '6 - Hardcore', selected: 6 === cube.difficulty }
+  ];
+  
   res.render("deleteCubePage", {
-    isLoggedIn: req.isLoggedIn,
+    ...cube,
+    options,
+    isLoggedIn: req.isLoggedIn
   });
+});
+
+router.post("/delete/:id", authAccess, async (req, res) => {
+  const id = req.params.id;
+
+  await Cube.findByIdAndDelete(id);
+
+  res.redirect('/');
+});
+
+router.post("/edit/:id", authAccess, async (req, res) => {
+  const { name, description, difficultyLevel, imageUrl } = req.body;
+  const id = req.params.id;
+  const difficulty = +difficultyLevel + 1;
+
+  const newData = {};
+
+  name && (newData.name = name);
+  description && (newData.description = description);
+  difficulty && (newData.difficulty = difficulty);
+  imageUrl && (newData.imageUrl = imageUrl);
+
+  await Cube.findByIdAndUpdate(id, newData);
+
+  res.redirect('/');
 });
 
 module.exports = router;
